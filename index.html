@@ -3,102 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Emulationtype</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+  <title>Emulationtype.com</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap">
   <style>
     body {
       margin: 0;
-      font-family: 'Fira Code', monospace;
-      background-color: #111;
-      color: #eee;
+      font-family: 'JetBrains Mono', monospace;
+      background-color: #0f0f0f;
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
+      padding: 40px 20px;
     }
 
-    h1 { margin-bottom: 10px; }
-
-    #controls {
+    h1 {
+      font-size: 2rem;
       margin-bottom: 10px;
     }
 
-    select, input[type=number] {
-      font-family: 'Fira Code', monospace;
-      background-color: #222;
-      color: #eee;
-      border: none;
-      padding: 5px;
-      margin: 0 5px;
+    #mode-selector, #custom-count, #settings {
+      margin: 10px;
     }
 
-    #word-container {
-      font-size: 18px;
-      margin-bottom: 20px;
+    #words {
+      font-size: 1.2rem;
+      margin: 20px auto;
+      max-width: 800px;
       text-align: center;
-      max-width: 90%;
-      line-height: 1.8;
+      word-wrap: break-word;
+      line-height: 1.6;
     }
 
-    #input-field {
-      background: #222;
-      border: none;
-      color: #fff;
-      font-size: 20px;
+    #input {
+      font-size: 1rem;
+      padding: 8px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    #youtube-button {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background-color: #ff0000;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    #settings-panel {
+      display: none;
+      background: rgba(255, 255, 255, 0.05);
       padding: 10px;
-      width: 80%;
-      text-align: center;
-      outline: none;
-    }
-
-    .correct { color: #0f0; }
-    .incorrect { color: #f00; }
-    .cursor {
-      border-bottom: 2px solid #0af;
-      animation: blink 1s step-end infinite;
-    }
-
-    @keyframes blink {
-      50% { border-color: transparent; }
+      border-radius: 10px;
+      margin-top: 10px;
     }
 
     #owner-menu {
       display: none;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.8);
-      border: 2px solid #0af;
-      border-radius: 8px;
+      background-color: rgba(0, 255, 255, 0.1);
+      border: 1px solid cyan;
       padding: 10px;
-      color: white;
+      margin-top: 20px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
-  <h1>Emulationtype</h1>
+  <h1>Emulationtype.com</h1>
+  <select id="mode-selector">
+    <option value="10">10 words</option>
+    <option value="25">25 words</option>
+    <option value="50">50 words</option>
+    <option value="custom">Custom...</option>
+  </select>
+  <input id="custom-count" placeholder="Enter custom word count" style="display:none;" />
 
-  <div id="controls">
-    <label>Word Mode:</label>
-    <select id="mode-selector">
-      <option value="10">10 words</option>
-      <option value="25" selected>25 words</option>
-      <option value="50">50 words</option>
-      <option value="custom">Custom</option>
-    </select>
-    <input type="number" id="custom-count" placeholder="Custom #" min="1" style="display:none;width:60px;">
-    <button onclick="startTest()">Start</button>
+  <div id="words"></div>
+  <input id="input" placeholder="Start typing..." />
+
+  <button id="settings">⚙️ Settings</button>
+  <div id="settings-panel">
+    <label>
+      Theme:
+      <select id="theme-select">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+        <option value="blue">Blue Neon</option>
+      </select>
+    </label>
   </div>
 
-  <div id="word-container"></div>
-  <input type="text" id="input-field" autocomplete="off" autofocus />
+  <div id="owner-menu"><strong>Owner Menu:</strong> <p>[Features coming soon]</p></div>
 
-  <div id="owner-menu">
-    <h3>Owner Menu</h3>
-    <p>ID Verified. Special tools will go here.</p>
-  </div>
+  <a id="youtube-button" href="https://youtube.com/@emulation12" target="_blank">My YouTube</a>
 
   <script src="main.js"></script>
 </body>
