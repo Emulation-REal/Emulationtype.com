@@ -1,107 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Emulationtype.com</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'JetBrains Mono', monospace;
-      background-color: #0f0f0f;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    #mode-selector, #custom-count, #settings {
-      margin: 10px;
-    }
-
-    #words {
-      font-size: 1.2rem;
-      margin: 20px auto;
-      max-width: 800px;
-      text-align: center;
-      word-wrap: break-word;
-      line-height: 1.6;
-    }
-
-    #input {
-      font-size: 1rem;
-      padding: 8px;
-      width: 100%;
-      max-width: 600px;
-    }
-
-    #youtube-button {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background-color: #ff0000;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      text-decoration: none;
-      z-index: 100;
-    }
-
-    #settings-panel {
-      display: none;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 10px;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-
-    #owner-menu {
-      display: none;
-      background-color: rgba(0, 255, 255, 0.1);
-      border: 1px solid cyan;
-      padding: 10px;
-      margin-top: 20px;
-      border-radius: 8px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emulationtype.com - Typing Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg-dark: #121212;
+    --bg-light: #f2f2f2;
+    --text-dark: #e0e0e0;
+    --text-light: #202020;
+    --accent: #4f8ef7;
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    user-select: none;
+  }
+  body.light {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+  }
+  header {
+    padding: 1rem 2rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.8rem;
+    border-bottom: 1px solid #444;
+  }
+  body.light header {
+    border-color: #ccc;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+  #wordContainer {
+    font-size: 1.25rem;
+    max-width: 700px;
+    line-height: 2rem;
+    color: var(--text-dark);
+    user-select: none;
+  }
+  body.light #wordContainer {
+    color: var(--text-light);
+  }
+  #wordContainer .correct {
+    color: #4caf50;
+  }
+  #wordContainer .incorrect {
+    color: #f44336;
+  }
+  #inputArea {
+    margin-top: 1rem;
+    width: 700px;
+  }
+  #inputArea input {
+    width: 100%;
+    font-size: 1.25rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--accent);
+    outline: none;
+  }
+  #inputArea input:focus {
+    border-color: #3a6ed8;
+  }
+  #stats {
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+  #modeSelect {
+    margin-top: 1rem;
+    max-width: 700px;
+  }
+  #modeSelect label {
+    margin-right: 1rem;
+    font-weight: 600;
+  }
+  #customCountInput {
+    width: 60px;
+    padding: 2px 6px;
+    font-size: 1rem;
+    margin-left: 6px;
+  }
+  #settingsButton {
+    margin-top: 1rem;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    background-color: var(--accent);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+  }
+  #settingsPanel {
+    margin-top: 1rem;
+    max-width: 700px;
+    padding: 1rem;
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    display: none;
+  }
+  #settingsPanel label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  #settingsPanel select, #settingsPanel input[type=range] {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  #ownerMenu {
+    margin-top: 1rem;
+    max-width: 700px;
+    border: 1px solid #f0ad4e;
+    background: #fff3cd;
+    padding: 1rem;
+    display: none;
+    border-radius: 10px;
+  }
+  #youtubeButton {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--accent);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0 8px var(--accent);
+    text-decoration: none;
+    user-select: none;
+    transition: background 0.3s ease;
+  }
+  #youtubeButton:hover {
+    background: #3a6ed8;
+  }
+</style>
 </head>
 <body>
-  <h1>Emulationtype.com</h1>
-  <select id="mode-selector">
-    <option value="10">10 words</option>
-    <option value="25">25 words</option>
-    <option value="50">50 words</option>
-    <option value="custom">Custom...</option>
-  </select>
-  <input id="custom-count" placeholder="Enter custom word count" style="display:none;" />
-
-  <div id="words"></div>
-  <input id="input" placeholder="Start typing..." />
-
-  <button id="settings">⚙️ Settings</button>
-  <div id="settings-panel">
+<header>Emulationtype.com - Typing Test</header>
+<main>
+  <div id="modeSelect">
+    <label><input type="radio" name="wordCount" value="10" checked /> 10 Words</label>
+    <label><input type="radio" name="wordCount" value="25" /> 25 Words</label>
+    <label><input type="radio" name="wordCount" value="50" /> 50 Words</label>
     <label>
-      Theme:
-      <select id="theme-select">
-        <option value="dark">Dark</option>
-        <option value="light">Light</option>
-        <option value="blue">Blue Neon</option>
-      </select>
+      <input type="radio" name="wordCount" value="custom" /> Custom:
+      <input type="number" id="customCountInput" min="5" max="200" value="30" />
     </label>
   </div>
-
-  <div id="owner-menu"><strong>Owner Menu:</strong> <p>[Features coming soon]</p></div>
-
-  <a id="youtube-button" href="https://youtube.com/@emulation12" target="_blank">My YouTube</a>
-
-  <script src="main.js"></script>
+  <div id="wordContainer"></div>
+  <div id="inputArea">
+    <input type="text" id="inputBox" placeholder="Start typing here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+  </div>
+  <div id="stats">WPM: 0 | Accuracy: 100%</div>
+  <button id="settingsButton">Settings ⚙️</button>
+  <div id="settingsPanel">
+    <label for="themeSelect">Theme:</label>
+    <select id="themeSelect">
+      <option value="dark">Dark</option>
+      <option value="light">Light</option>
+    </select>
+    <label for="fontSizeRange">Font Size: <span id="fontSizeValue">20</span>px</label>
+    <input type="range" id="fontSizeRange" min="14" max="36" value="20" />
+  </div>
+  <div id="ownerMenu">
+    <h3>Owner Menu 🛠️</h3>
+    <p>Welcome, Owner! Here you can customize advanced features and manage the platform.</p>
+    <!-- Example controls -->
+    <button id="resetStatsBtn">Reset Stats</button>
+  </div>
+</main>
+<a id="youtubeButton" href="https://www.youtube.com/channel/UCyourchannelid" target="_blank" rel="noopener noreferrer">My YouTube Channel</a>
+<script src="main.js"></script>
 </body>
 </html>
