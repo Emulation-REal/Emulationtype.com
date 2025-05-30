@@ -1,33 +1,62 @@
 const wordList = [
-  "emulation", "javascript", "keyboard", "typing", "challenge", "speed",
-  "accuracy", "website", "github", "monkeytype", "clone", "custom"
+  "emulation", "javascript", "keyboard", "typing", "challenge", "speed", "accuracy", "website", "github",
+  "clone", "custom", "function", "return", "constant", "input", "output", "language", "code", "html", "css",
+  "design", "development", "logic", "event", "variable", "value", "script", "modular", "system", "command",
+  "element", "character", "array", "loop", "syntax", "random", "check", "result", "score", "timer", "layout",
+  "theme", "owner", "permission", "status", "controller", "detect", "player", "generate", "validate", "render"
 ];
 
-const wordContainer = document.getElementById("word-container");
-const inputField = document.getElementById("input-field");
+let wordContainer = document.getElementById("word-container");
+let inputField = document.getElementById("input-field");
+let modeSelector = document.getElementById("mode-selector");
+let customInput = document.getElementById("custom-count");
+let ownerMenu = document.getElementById("owner-menu");
 
+let currentWords = [];
 let currentWordIndex = 0;
 let currentCharIndex = 0;
-let currentWord = wordList[currentWordIndex];
+let currentWord = "";
+let userID = getUserID();
+
+function getUserID() {
+  let id = localStorage.getItem("emulationtype_id");
+  if (!id) {
+    id = "user-" + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem("emulationtype_id", id);
+  }
+  return id;
+}
+
+function verifyOwner() {
+  const ownerId = "your_id_here"; // 🔑 Replace with your ID
+  if (userID === ownerId) {
+    ownerMenu.style.display = "block";
+  }
+}
+
+function shuffleWords(count) {
+  const shuffled = [...wordList].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
 
 function renderWord() {
   wordContainer.innerHTML = "";
 
-  for (let i = 0; i < currentWord.length; i++) {
-    const span = document.createElement("span");
-    span.textContent = currentWord[i];
+  const word = currentWords[currentWordIndex] || "";
+  currentWord = word;
 
+  for (let i = 0; i < word.length; i++) {
+    const span = document.createElement("span");
+    span.textContent = word[i];
     if (i === currentCharIndex) {
       span.classList.add("cursor");
     }
-
     wordContainer.appendChild(span);
   }
 }
 
 inputField.addEventListener("input", () => {
   const value = inputField.value;
-
   const spans = wordContainer.querySelectorAll("span");
 
   for (let i = 0; i < currentWord.length; i++) {
@@ -49,11 +78,37 @@ inputField.addEventListener("input", () => {
 
   if (value === currentWord) {
     inputField.value = "";
-    currentWordIndex = (currentWordIndex + 1) % wordList.length;
-    currentWord = wordList[currentWordIndex];
+    currentWordIndex++;
     currentCharIndex = 0;
+
+    if (currentWordIndex >= currentWords.length) {
+      alert("Test completed!");
+      inputField.disabled = true;
+      return;
+    }
+
     renderWord();
   }
 });
 
-renderWord();
+modeSelector.addEventListener("change", () => {
+  customInput.style.display = modeSelector.value === "custom" ? "inline-block" : "none";
+});
+
+function startTest() {
+  inputField.disabled = false;
+  inputField.value = "";
+  inputField.focus();
+
+  let count = parseInt(modeSelector.value);
+  if (modeSelector.value === "custom") {
+    count = parseInt(customInput.value) || 10;
+  }
+
+  currentWords = shuffleWords(count);
+  currentWordIndex = 0;
+  currentCharIndex = 0;
+  renderWord();
+}
+
+verifyOwner();
