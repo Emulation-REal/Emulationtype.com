@@ -1,114 +1,105 @@
-const wordList = [
-  "emulation", "javascript", "keyboard", "typing", "challenge", "speed", "accuracy", "website", "github",
-  "clone", "custom", "function", "return", "constant", "input", "output", "language", "code", "html", "css",
-  "design", "development", "logic", "event", "variable", "value", "script", "modular", "system", "command",
-  "element", "character", "array", "loop", "syntax", "random", "check", "result", "score", "timer", "layout",
-  "theme", "owner", "permission", "status", "controller", "detect", "player", "generate", "validate", "render"
+// Generate or get permanent ID
+let userID = localStorage.getItem("emulationtype_id");
+if (!userID) {
+  userID = "user-" + Math.random().toString(36).substr(2, 9);
+  localStorage.setItem("emulationtype_id", userID);
+}
+console.log("Your ID:", userID);
+
+// === WORDS ===
+const WORDS = [
+  "keyboard", "javascript", "emulation", "developer", "browser", "function",
+  "asynchronous", "repository", "design", "matrix", "code", "project", "performance",
+  "module", "interactive", "feature", "type", "visual", "component", "theme", "data",
+  "logic", "parameter", "terminal", "array", "object", "syntax", "callback", "button",
+  "typing", "network", "input", "focus", "media", "speed", "accuracy", "configurable",
+  "settings", "interface", "render", "loop", "timer", "custom", "dynamic", "global",
+  "access", "identifier", "token", "mod", "admin", "emulationtype", "script"
 ];
 
-let wordContainer = document.getElementById("word-container");
-let inputField = document.getElementById("input-field");
-let modeSelector = document.getElementById("mode-selector");
-let customInput = document.getElementById("custom-count");
-let ownerMenu = document.getElementById("owner-menu");
+// === DOM ===
+const wordsContainer = document.getElementById("words");
+const input = document.getElementById("input");
+const modeSelector = document.getElementById("mode-selector");
+const customCount = document.getElementById("custom-count");
+const settingsBtn = document.getElementById("settings");
+const settingsPanel = document.getElementById("settings-panel");
+const themeSelect = document.getElementById("theme-select");
+const ownerMenu = document.getElementById("owner-menu");
 
+// === State ===
 let currentWords = [];
-let currentWordIndex = 0;
-let currentCharIndex = 0;
-let currentWord = "";
-let userID = getUserID();
+let wordIndex = 0;
 
-function getUserID() {
-  let id = localStorage.getItem("emulationtype_id");
-  if (!id) {
-    id = "user-" + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem("emulationtype_id", id);
+// === Functions ===
+function generateWords(count) {
+  currentWords = [];
+  for (let i = 0; i < count; i++) {
+    currentWords.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
   }
-  return id;
+  wordsContainer.textContent = currentWords.join(" ");
+  wordIndex = 0;
+  input.value = "";
+  input.focus();
 }
 
-function verifyOwner() {
-  const ownerId = "your_id_here"; // 🔑 Replace with your ID
-  if (userID === ownerId) {
+function applyTheme(theme) {
+  switch (theme) {
+    case "dark":
+      document.body.style.backgroundColor = "#0f0f0f";
+      document.body.style.color = "white";
+      break;
+    case "light":
+      document.body.style.backgroundColor = "white";
+      document.body.style.color = "#111";
+      break;
+    case "blue":
+      document.body.style.backgroundColor = "#0d1117";
+      document.body.style.color = "#00ffff";
+      break;
+  }
+  localStorage.setItem("theme", theme);
+}
+
+function checkOwnerAccess() {
+  const ownerID = "user-yourid"; // Replace with your actual ID
+  if (userID === ownerID) {
     ownerMenu.style.display = "block";
   }
 }
 
-function shuffleWords(count) {
-  const shuffled = [...wordList].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
-}
-
-function renderWord() {
-  wordContainer.innerHTML = "";
-
-  const word = currentWords[currentWordIndex] || "";
-  currentWord = word;
-
-  for (let i = 0; i < word.length; i++) {
-    const span = document.createElement("span");
-    span.textContent = word[i];
-    if (i === currentCharIndex) {
-      span.classList.add("cursor");
-    }
-    wordContainer.appendChild(span);
-  }
-}
-
-inputField.addEventListener("input", () => {
-  const value = inputField.value;
-  const spans = wordContainer.querySelectorAll("span");
-
-  for (let i = 0; i < currentWord.length; i++) {
-    const char = value[i];
-    const span = spans[i];
-
-    if (char == null) {
-      span.classList.remove("correct", "incorrect");
-    } else if (char === currentWord[i]) {
-      span.classList.add("correct");
-      span.classList.remove("incorrect");
-    } else {
-      span.classList.add("incorrect");
-      span.classList.remove("correct");
-    }
-  }
-
-  currentCharIndex = value.length;
-
-  if (value === currentWord) {
-    inputField.value = "";
-    currentWordIndex++;
-    currentCharIndex = 0;
-
-    if (currentWordIndex >= currentWords.length) {
-      alert("Test completed!");
-      inputField.disabled = true;
-      return;
-    }
-
-    renderWord();
-  }
-});
-
+// === Events ===
 modeSelector.addEventListener("change", () => {
-  customInput.style.display = modeSelector.value === "custom" ? "inline-block" : "none";
+  if (modeSelector.value === "custom") {
+    customCount.style.display = "inline";
+  } else {
+    customCount.style.display = "none";
+    generateWords(parseInt(modeSelector.value));
+  }
 });
 
-function startTest() {
-  inputField.disabled = false;
-  inputField.value = "";
-  inputField.focus();
+customCount.addEventListener("change", () => {
+  const val = parseInt(customCount.value);
+  if (!isNaN(val)) generateWords(val);
+});
 
-  let count = parseInt(modeSelector.value);
-  if (modeSelector.value === "custom") {
-    count = parseInt(customInput.value) || 10;
+input.addEventListener("input", () => {
+  const typed = input.value.trim().split(" ");
+  if (typed.length >= currentWords.length) {
+    alert("✅ Finished!");
+    generateWords(currentWords.length);
   }
+});
 
-  currentWords = shuffleWords(count);
-  currentWordIndex = 0;
-  currentCharIndex = 0;
-  renderWord();
-}
+settingsBtn.addEventListener("click", () => {
+  settingsPanel.style.display = settingsPanel.style.display === "block" ? "none" : "block";
+});
 
-verifyOwner();
+themeSelect.addEventListener("change", () => {
+  applyTheme(themeSelect.value);
+});
+
+// === Init ===
+applyTheme(localStorage.getItem("theme") || "dark");
+generateWords(10);
+checkOwnerAccess();
