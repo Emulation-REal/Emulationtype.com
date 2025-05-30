@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emulationtype</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Fira Code', monospace;
+      background-color: #111;
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #word-container {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #input-field {
+      background: #222;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      padding: 10px;
+      width: 80%;
+      text-align: center;
+      outline: none;
+    }
+
+    .correct {
+      color: #0f0;
+    }
+
+    .incorrect {
+      color: #f00;
+    }
+
+    .cursor {
+      border-bottom: 2px solid #0af;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Emulationtype</h1>
+  <div id="word-container"></div>
+  <input type="text" id="input-field" autocomplete="off" autofocus />
+  <script src="main.js"></script>
+</body>
+</html>
