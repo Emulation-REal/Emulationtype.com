@@ -19,30 +19,42 @@
       overflow: hidden;
     }
 
+    h1 { margin-bottom: 10px; }
+
+    #controls {
+      margin-bottom: 10px;
+    }
+
+    select, input[type=number] {
+      font-family: 'Fira Code', monospace;
+      background-color: #222;
+      color: #eee;
+      border: none;
+      padding: 5px;
+      margin: 0 5px;
+    }
+
     #word-container {
-      font-size: 24px;
+      font-size: 18px;
       margin-bottom: 20px;
+      text-align: center;
+      max-width: 90%;
+      line-height: 1.8;
     }
 
     #input-field {
       background: #222;
       border: none;
       color: #fff;
-      font-size: 24px;
+      font-size: 20px;
       padding: 10px;
       width: 80%;
       text-align: center;
       outline: none;
     }
 
-    .correct {
-      color: #0f0;
-    }
-
-    .incorrect {
-      color: #f00;
-    }
-
+    .correct { color: #0f0; }
+    .incorrect { color: #f00; }
     .cursor {
       border-bottom: 2px solid #0af;
       animation: blink 1s step-end infinite;
@@ -51,12 +63,43 @@
     @keyframes blink {
       50% { border-color: transparent; }
     }
+
+    #owner-menu {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #0af;
+      border-radius: 8px;
+      padding: 10px;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <h1>Emulationtype</h1>
+
+  <div id="controls">
+    <label>Word Mode:</label>
+    <select id="mode-selector">
+      <option value="10">10 words</option>
+      <option value="25" selected>25 words</option>
+      <option value="50">50 words</option>
+      <option value="custom">Custom</option>
+    </select>
+    <input type="number" id="custom-count" placeholder="Custom #" min="1" style="display:none;width:60px;">
+    <button onclick="startTest()">Start</button>
+  </div>
+
   <div id="word-container"></div>
   <input type="text" id="input-field" autocomplete="off" autofocus />
+
+  <div id="owner-menu">
+    <h3>Owner Menu</h3>
+    <p>ID Verified. Special tools will go here.</p>
+  </div>
+
   <script src="main.js"></script>
 </body>
 </html>
